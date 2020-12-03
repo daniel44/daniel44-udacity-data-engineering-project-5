@@ -128,7 +128,13 @@ run_quality_checks = DataQualityOperator(
     provide_context=True,
     aws_credentials_id="aws_credentials",
     redshift_conn_id='redshift',
-    tables=["songplay", "users", "songs", "artists", "time"]
+    dq_checks=[
+                    {'check_sql':'SELECT COUNT(*) FROM songplay WHERE playid is null' , 'expected_result': 0},
+                    {'check_sql':'SELECT COUNT(*) FROM users WHERE userid is null' , 'expected_result': 0},
+                    {'check_sql':'SELECT COUNT(*) FROM songs WHERE songid is null' , 'expected_result': 0},
+                    {'check_sql':'SELECT COUNT(*) FROM artists WHERE artistid is null' , 'expected_result': 0},
+                    {'check_sql':'SELECT COUNT(*) FROM time WHERE start_time is null' , 'expected_result': 0},
+                ]
 )
 
 end_operator = DummyOperator(task_id='Stop_execution',  dag=dag)
