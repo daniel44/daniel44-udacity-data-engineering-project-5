@@ -10,19 +10,19 @@ class DataQualityOperator(BaseOperator):
     def __init__(self,
                  aws_credentials_id="",
                  redshift_conn_id="",
-                 tables=[],
+                 dq_checks=[],
                  *args, **kwargs):
 
         super(DataQualityOperator, self).__init__(*args, **kwargs)
         self.aws_credentials_id = aws_credentials_id,
         self.redshift_conn_id = redshift_conn_id,
-        self.tables = tables
+        self.dq_checks = dq_checks
 
     def execute(self, context):
         redshift_hook = PostgresHook(self.redshift_conn_id)
-        for table in self.tables:
-            records = redshift_hook.get_records(f"SELECT COUNT(*) FROM {table}")
-            if len(records) < 1 or len(records[0]) < 1 or records[0][0] < 1:
-                self.log.error(f"Check failed. No rows found in table {table}")
-                raise ValueError(f"Check failed. No rows found in table {table}")
-            self.log.info(f"Check passed. Table {table} contains {records[0][0]} records")
+        for dqc in self.dq_checks:
+            records = redshift_hook.get_records(dqc['check_sql'])
+            if len(records) != dqc['expected_result']:
+                self.log.error(f"Check failed. Test {dqc} not passed")
+                raise ValueError(f"Check failed. Test {dqc} not passed")
+            self.log.info(f"Check {dqc} passed.")
