@@ -52,6 +52,10 @@ The pipeline is executed using Apache airflow with the following DAG:
 
 ![airflow_dag](/dag.png)
 
+The tree view shows all tasks can be completed succesfully:
+
+![airflow_dag_tv](/dagtv.png)
+
 ##### Analysis and Data Quality results
 
 Besides the Airflow Data Quality procedures, the following query was conducted in redshift:
