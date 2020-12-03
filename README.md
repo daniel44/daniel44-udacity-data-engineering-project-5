@@ -36,7 +36,9 @@ The following redshift cluster was created:
 
 ![redshift_cluster](/cluster.png)
 
-The security group for redshift was utilized and it was open to public IPs
+The security group for redshift was utilized and it was open to public IPs:
+
+![redshift_cluster_permissions](/clusterperm.png)
 
 ###### ETL pipeline
 
